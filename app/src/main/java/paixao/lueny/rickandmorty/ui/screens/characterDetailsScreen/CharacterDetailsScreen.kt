@@ -36,7 +36,6 @@ import paixao.lueny.rickandmorty.ui.theme.teal_700
 @Composable
 fun CharactersDetailsScreen(
     character: Character,
-    modifier: Modifier = Modifier,
 ) {
     Column(
         Modifier

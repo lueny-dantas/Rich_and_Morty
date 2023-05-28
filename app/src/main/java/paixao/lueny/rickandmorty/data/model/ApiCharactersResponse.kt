@@ -4,7 +4,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiCharactersResponse(
+    val info: PageInfoResponse,
     val results: List<CharacterResponse>
+)
+
+@Serializable
+data class PageInfoResponse(
+    val pages: Int,
+    val next: String? = null,
 )
 @Serializable
 data class CharacterResponse(
