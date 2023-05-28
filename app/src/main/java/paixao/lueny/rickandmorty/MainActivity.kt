@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,31 +47,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun RickandMortyApp() {
-
-    val service = remember {
-        ApiCharacterInfrastructure()
-    }
-
-    val characters = remember {
-        MutableStateFlow<List<Character>>(emptyList())
-    }
-    val charactersResult = characters.collectAsState().value
-
-    LaunchedEffect(Unit) {
-        runCatching {
-            service.getCharacters()
-        }.fold(
-            onSuccess = {
-                characters.emit(it)
-            },
-            onFailure = {
-                println(it)
-            }
-        )
-    }
-
     Column {
-        CharactersScreen(charactersResult)
+        CharactersScreen()
     }
 }
 
@@ -87,11 +65,6 @@ fun HomeScreen (
         }
 
 }*/
-
-@Composable
-fun ResultScreen(charactersUistate: Any, modifier: Modifier) {
-
-}
 
 @Composable
 fun ErrorScreen(modifier: Modifier) {
