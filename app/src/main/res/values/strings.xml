@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RickandMorty</string>
+    <string name="loading">Loading</string>
+    <string name="loading_failed"> Falha ao Carregar </string>
 </resources>
