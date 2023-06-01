@@ -5,4 +5,5 @@
     <string name="characters"> Personagens</string>
     <string name="filter"> Filtrar </string>
     <string name="details_characters"> Detalhes do Personagem</string>
+    <string name="open_filter">Abrir Filtro</string>
 </resources>
