@@ -1,39 +1,24 @@
 package paixao.lueny.rickandmorty.ui.screens.charactersScreen
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import paixao.lueny.rickandmorty.data.retrofitBuilder.ApiCharacterInfrastructure
-import paixao.lueny.rickandmorty.ui.uiState.CharactersListUiState
-import paixao.lueny.rickandmorty.ui.uiState.PaginationState
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import kotlinx.coroutines.flow.Flow
+import paixao.lueny.rickandmorty.data.model.CharactersResponse
+import paixao.lueny.rickandmorty.data.retrofitBuilder.ApiService
+import paixao.lueny.rickandmorty.data.retrofitBuilder.CharacterDataSource
+import paixao.lueny.rickandmorty.domain.models.Character
 
-class CharactersListViewModel() {
+class CharactersListViewModel(): ViewModel() {
 
-    val service = ApiCharacterInfrastructure()
-
-    private val _uiState = MutableStateFlow(CharactersListUiState())
-    val uiState = _uiState.asStateFlow()
-
-    suspend fun getCharacters(nextPage: Int) {
-        val lastState = _uiState.value
-        val page = if (lastState.paginationState.lastPage.info.totalPages > nextPage || nextPage == 1)
-            service.getCharacters(nextPage)
-        else
-            null
-
-        if (page != null) {
-            val newPaginationState = PaginationState(
-                currentPage = nextPage,
-                lastPage = page,
-            )
-
-            val newCharactersList = _uiState.value.characters + page.characters
-
-            val newState = CharactersListUiState(
-                paginationState = newPaginationState,
-                characters = newCharactersList
-            )
-
-            _uiState.emit(newState)
+    private val charactersDataSource = CharacterDataSource()
+    fun getCharacters(): Flow<PagingData<Character>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20, maxSize = 999),
+            pagingSourceFactory = { charactersDataSource }
+        ).flow.cachedIn(viewModelScope)
         }
     }
-}

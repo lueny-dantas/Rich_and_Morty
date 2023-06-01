@@ -24,7 +24,7 @@ import paixao.lueny.rickandmorty.domain.models.Character
 import paixao.lueny.rickandmorty.ui.theme.RickandMortyTheme
 
 @Composable
-fun CharacterCard(
+fun CharacterItem(
     character: Character,
     modifier: Modifier = Modifier
 ) {
@@ -66,7 +66,7 @@ fun CharacterCard(
 @Composable
 fun CharacterCardPreview() {
     RickandMortyTheme {
-        CharacterCard(
+        CharacterItem(
             character = Character(
                 "Rick Sanchez",
                 Character.Status.Alive,
