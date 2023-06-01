@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import paixao.lueny.rickandmorty.R
 import paixao.lueny.rickandmorty.data.model.CharactersResponse
 import paixao.lueny.rickandmorty.domain.models.Character
 import paixao.lueny.rickandmorty.ui.theme.RickandMortyTheme
@@ -85,7 +86,7 @@ private fun Toolbar(context: Context, onFilterClick: () -> Unit) {
         ) {
 
             Text(
-                text = "Personagens",
+                text = context.getString(R.string.characters),
                 color = Color.White,
                 fontFamily = caveatFont,
                 textAlign = TextAlign.Center,
@@ -142,7 +143,7 @@ private fun FilterButton(onClick: () -> Unit) {
                 modifier = Modifier.size(18.dp)
             )
             Text(
-                text = "Filtrar",
+                text = context.getString(R.string.filter),
                 fontSize = 12.sp,
                 color = Color.White,
                 modifier = Modifier.padding(start = 4.dp)

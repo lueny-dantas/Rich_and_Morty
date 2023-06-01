@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,6 +38,7 @@ import paixao.lueny.rickandmorty.ui.theme.teal_700
 fun CharactersDetailsScreen(
     character: Character,
 ) {
+    val context = LocalContext.current
     Column(
         Modifier
             .fillMaxSize()
@@ -58,7 +60,7 @@ fun CharactersDetailsScreen(
                     )
                 Spacer(modifier = Modifier.weight(0.8F))
                 Text(
-                    text = "Detalhes",
+                    text = context.getString(R.string.details_characters),
                     color = Color.White,
                     fontFamily = caveatFont,
                     textAlign = TextAlign.Center,
