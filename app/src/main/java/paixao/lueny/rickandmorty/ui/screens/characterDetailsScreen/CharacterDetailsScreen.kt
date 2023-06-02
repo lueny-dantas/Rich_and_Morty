@@ -91,17 +91,39 @@ fun CharactersDetailsScreen(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold )
             Spacer(Modifier.height(16.dp))
-            Text(text = character.status.statusPresentation)
+            Row {
+                Text(text = context.getString(R.string.status))
+                Text(text = character.status.statusPresentation)
+            }
             Spacer(Modifier.height(16.dp))
-            Text(text = character.species)
+            Row {
+                Text(text = context.getString(R.string.species))
+                Text(text = character.species)
+            }
             Spacer(Modifier.height(16.dp))
-            Text(text = character.gender.genderApresentation)
+            Row {
+                Text(text = context.getString(R.string.gender))
+                Text(text = character.gender.genderApresentation)
+            }
             Spacer(Modifier.height(16.dp))
-            Text(text = character.origin.name)
+            Row {
+                Text(text = context.getString(R.string.origin))
+                Text(text = character.origin.name)
+            }
             Spacer(Modifier.height(16.dp))
-            Text(text = character.location.name)
+            Row {
+                Text(text = context.getString(R.string.location))
+                Text(text = character.location.name)
+            }
 
         }
+    }
+}
+
+@Composable
+fun CharacterDetails(text: String,){
+    Column {
+
     }
 }
 
