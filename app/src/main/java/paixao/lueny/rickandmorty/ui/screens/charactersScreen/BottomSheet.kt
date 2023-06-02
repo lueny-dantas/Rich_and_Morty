@@ -1,10 +1,8 @@
 package paixao.lueny.rickandmorty.ui.screens.charactersScreen
 
-import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,14 +20,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Button
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,8 +33,7 @@ import kotlinx.coroutines.launch
 import paixao.lueny.rickandmorty.R
 import paixao.lueny.rickandmorty.ui.theme.caveatFont
 import paixao.lueny.rickandmorty.ui.theme.teal_700
-import paixao.lueny.rickandmorty.ui.theme.white
-import paixao.lueny.rickandmorty.ui.uiState.HomeScreenUiState
+import paixao.lueny.rickandmorty.ui.screens.characterDetailsScreen.CharacterDetailsUiState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -63,7 +57,7 @@ fun FilterBottomSheet(onApplyFilter: () -> Unit, backContent: @Composable (() ->
 
 @Composable
 private fun BottomSheetContent(
-    state: HomeScreenUiState = HomeScreenUiState()
+    state: CharacterDetailsUiState = CharacterDetailsUiState()
 ) {
     val context = LocalContext.current
     Column(

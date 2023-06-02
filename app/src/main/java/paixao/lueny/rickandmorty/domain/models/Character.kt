@@ -1,7 +1,5 @@
 package paixao.lueny.rickandmorty.domain.models
 
-import paixao.lueny.rickandmorty.ui.uiState.CharactersListUiState
-
 
 data class Page(
     val info: PageInfo,

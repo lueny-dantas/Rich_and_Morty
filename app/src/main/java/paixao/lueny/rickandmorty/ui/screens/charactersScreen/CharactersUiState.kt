@@ -1,14 +1,10 @@
-package paixao.lueny.rickandmorty.ui.uiState
+package paixao.lueny.rickandmorty.ui.screens.charactersScreen
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import paixao.lueny.rickandmorty.domain.models.Character
 import paixao.lueny.rickandmorty.domain.models.Page
 import paixao.lueny.rickandmorty.domain.models.PageInfo
 
-data class CharactersListUiState(
+data class CharactersUiState(
     val paginationState: PaginationState = PaginationState(),
     val characters: List<Character> = emptyList()
 )

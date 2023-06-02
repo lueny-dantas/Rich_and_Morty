@@ -6,18 +6,18 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import paixao.lueny.rickandmorty.domain.models.Character
-import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersListViewModel
-/*
+import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersViewModel
+import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersScreen
+
 internal const val  charactersRoute = "characters"
 
 fun NavGraphBuilder.charactersScreen(
     onNavigateToCharacterDetails:(Character) -> Unit
 ) {
     composable(charactersRoute){
-        val viewModel = viewModel<CharactersListViewModel>()
-        val uiState by viewModel.uiState.collectAsState()
-        CharactersListScreen(
-            uiState = uiState,
+        val viewModel = viewModel<CharactersViewModel>()
+        CharactersScreen(
+            viewModel = viewModel,
             oncharacterClick = onNavigateToCharacterDetails
         )
     }
@@ -25,4 +25,4 @@ fun NavGraphBuilder.charactersScreen(
 
 fun NavController.navigateToCharacters(navOptions: NavOptions? = null){
     navigate(charactersRoute, navOptions)
-}*/
+}

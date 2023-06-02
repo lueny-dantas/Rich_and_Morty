@@ -1,7 +1,6 @@
 package paixao.lueny.rickandmorty.ui.screens.characterDetailsScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -35,8 +33,9 @@ import paixao.lueny.rickandmorty.ui.theme.caveatFont
 import paixao.lueny.rickandmorty.ui.theme.teal_700
 
 @Composable
-fun CharactersDetailsScreen(
+fun CharacterDetailsScreen(
     character: Character,
+    onBackClick:() -> Unit = {}
 ) {
     val context = LocalContext.current
     Column(
@@ -132,7 +131,7 @@ fun CharacterDetails(text: String,){
 @Composable
 fun CharactersDetailsScreenPreview() {
     RickandMortyTheme {
-        CharactersDetailsScreen(
+        CharacterDetailsScreen(
             character =
             Character(
                 "Rick Sanchez",

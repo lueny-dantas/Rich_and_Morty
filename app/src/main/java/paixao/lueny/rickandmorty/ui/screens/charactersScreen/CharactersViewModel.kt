@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import paixao.lueny.rickandmorty.data.retrofitBuilder.CharacterDataSource
 import paixao.lueny.rickandmorty.domain.models.Character
 
-class CharactersListViewModel(): ViewModel() {
+class CharactersViewModel(): ViewModel() {
 
     private val charactersDataSource = CharacterDataSource()
     fun getCharacters(): Flow<PagingData<Character>> {
