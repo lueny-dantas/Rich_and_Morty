@@ -41,7 +41,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RickandMortyApp() {
     Column {
-        CharactersScreen()
+        CharactersScreen(
+            onCharacterClick = {})
     }
 }
 
