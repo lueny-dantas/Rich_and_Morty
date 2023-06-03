@@ -8,21 +8,19 @@ import paixao.lueny.rickandmorty.domain.models.Character
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    character: Character,
 ) {
     NavHost(
         navController = navController,
         startDestination = homeGraphRoute
     ) {
         homeGraph(
-            onNavigateToCharacterDetails = {character ->
-                navController.navigateToCharacterDetails(character.id)
+            onNavigateToCharacterDetails = { character ->
+                navController.navigateToCharacterDetails(character)
             },
         )
         characterDetailsScreen(
-            character = character,
             onPopBackStack = {
-                navController.navigateToCharacters()
+                navController.popBackStack()
             },
         )
     }

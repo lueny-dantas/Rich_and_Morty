@@ -1,13 +1,14 @@
-package paixao.lueny.rickandmorty.data.retrofitBuilder
+package paixao.lueny.rickandmorty.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import paixao.lueny.rickandmorty.data.mappers.CharactersMapper
+import paixao.lueny.rickandmorty.data.retrofitBuilder.RetrofitBuilder
 import paixao.lueny.rickandmorty.domain.models.Character
 import retrofit2.HttpException
 
 
- class CharacterDataSource() : PagingSource<Int, Character>() {
+ class CharactersDataSource() : PagingSource<Int, Character>() {
      private val api get() = RetrofitBuilder().create(ApiService::class.java)
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
@@ -34,6 +35,15 @@ import retrofit2.HttpException
             LoadResult.Error(e)
         }
     }
+
+     //CRIAR FUN QUE BATA NA API E TRANSFORME UM CHARACTER_REPONSE EM UM CHARACTER E O RETORNE.
+    suspend fun getCharacter(characterId: Int): Character {
+        val characterResponse = api.getCharacter(characterId)
+        val character: Character = CharactersMapper.toDomain(characterResponse)
+
+         return character
+    }
+
 
     companion object {
         private const val STARTING_PAGE_INDEX = 1

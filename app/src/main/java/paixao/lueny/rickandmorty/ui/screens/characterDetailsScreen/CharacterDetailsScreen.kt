@@ -20,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,15 +38,30 @@ import paixao.lueny.rickandmorty.R
 import paixao.lueny.rickandmorty.domain.models.Character
 import paixao.lueny.rickandmorty.ui.theme.RickandMortyTheme
 import paixao.lueny.rickandmorty.ui.theme.caveatFont
-import paixao.lueny.rickandmorty.ui.theme.teal_700
 import paixao.lueny.rickandmorty.ui.theme.white
 
 @Composable
 fun CharacterDetailsScreen(
-    character: Character,
-    onBackClick: () -> Unit
+    characterId: Int,
+    onBackClick: () -> Unit,
+    viewModel: CharacterDetailsViewModel
+) {
+    val character = viewModel.character.collectAsState().value
+
+    LaunchedEffect(Unit) {
+        viewModel.getCharacter(characterId = characterId)
+    }
+
+    Content(onBackClick, character)
+}
+
+@Composable
+private fun Content(
+    onBackClick: () -> Unit,
+    character: Character?
 ) {
     val context = LocalContext.current
+
     Column(
         Modifier
             .fillMaxSize()
@@ -55,27 +72,29 @@ fun CharacterDetailsScreen(
             context = context,
             onBackClick = onBackClick
         )
-        AsyncImage(
-            model = character.image,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            placeholder = painterResource(id = R.drawable.placeholder),
-            contentScale = ContentScale.Crop,
-        )
-        Column(
-            Modifier.padding(
-                horizontal = 16.dp,
-                vertical = 8.dp
+        if (character != null) {
+            AsyncImage(
+                model = character.image,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
+                placeholder = painterResource(id = R.drawable.placeholder),
+                contentScale = ContentScale.Crop,
             )
-        ) {
-            CharacterName(character)
-            Information(label = R.string.status, value = character.status.statusPresentation)
-            Information(label = R.string.species, value = character.species)
-            Information(label = R.string.gender, value = character.gender.genderApresentation)
-            Information(label = R.string.origin, value = character.origin.name)
-            Information(label = R.string.location, value = character.location.name)
+            Column(
+                Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                )
+            ) {
+                CharacterName(character)
+                Information(label = R.string.status, value = character.status.statusPresentation)
+                Information(label = R.string.species, value = character.species)
+                Information(label = R.string.gender, value = character.gender.genderApresentation)
+                Information(label = R.string.origin, value = character.origin.name)
+                Information(label = R.string.location, value = character.location.name)
+            }
         }
     }
 }
@@ -146,19 +165,12 @@ private fun ToolBar(
     }
 }
 
-@Composable
-fun CharacterDetails(text: String) {
-    Column {
-
-    }
-}
-
 
 @Preview
 @Composable
 fun CharactersDetailsScreenPreview() {
     RickandMortyTheme {
-        CharacterDetailsScreen(
+        Content(
             character =
             Character(
                 0,

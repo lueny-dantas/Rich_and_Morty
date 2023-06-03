@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
@@ -16,19 +16,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import paixao.lueny.rickandmorty.domain.models.Character
 import paixao.lueny.rickandmorty.ui.navigation.AppNavHost
-import paixao.lueny.rickandmorty.ui.navigation.characterDetailsRoute
-import paixao.lueny.rickandmorty.ui.navigation.charactersRoute
 import paixao.lueny.rickandmorty.ui.navigation.navigateToCharacterDetails
-import paixao.lueny.rickandmorty.ui.navigation.navigateToCharacters
-import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersScreen
-import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersViewModel
 import paixao.lueny.rickandmorty.ui.theme.RickandMortyTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RickandMortyAppController()
+                    RickAndMortyAppController()
                 }
             }
         }
@@ -48,7 +42,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun RickandMortyAppController(navController: NavHostController = rememberNavController()) {
+fun RickAndMortyAppController() {
+    val navController: NavHostController = rememberNavController()
 
     LaunchedEffect(Unit) {
         navController.addOnDestinationChangedListener { _, _, _ ->
@@ -58,70 +53,29 @@ fun RickandMortyAppController(navController: NavHostController = rememberNavCont
             Log.i("MainActivity", "onCreate: back stack - $routes")
         }
     }
-    val backStackEntryState by navController.currentBackStackEntryAsState()
-    val orderDoneMessage = backStackEntryState
-        ?.savedStateHandle
-        ?.getStateFlow<String?>("order_done", null)
-        ?.collectAsState()
-    Log.i(
-        "MainActivity",
-        "onCreate: order done message ${orderDoneMessage?.value} "
-    )
-    val currentDestination = backStackEntryState?.destination
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-    orderDoneMessage?.value?.let { message ->
-        scope.launch {
-            snackbarHostState.showSnackbar(message = message)
-        }
-    }
-    val currentRoute = currentDestination?.route
-    val selectedItem by remember(currentDestination) {
-        when (currentRoute) {
-            charactersRoute ->// adicionar o caminho
-                characterDetailsRoute-> //adicionar o caminho
-        } else ->
-    }
-    RickandMortyApp(
-        onCharacterSelected = {character ->
+
+    RickAndMortyApp(
+        onCharacterSelected = { character ->
             navController.navigateToCharacterDetails(character)
         },
-        onBackCharacters = {navController.navigateToCharacters()}
+        onBackCharacters = {navController.popBackStack()}
     ) {
-        AppNavHost(navController = navController, character =//??)
+        AppNavHost(navController = navController)
     }
 
 
 }
 
 @Composable
-fun RickandMortyApp(
-    onCharacterSelected: (Character?) -> Unit = {},
+fun RickAndMortyApp(
+    onCharacterSelected: (Character) -> Unit = {},
     onBackCharacters: () -> Unit = {},
-    function: () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     RickandMortyTheme {
-        Column(
+        Box (
         ) {
-            CharactersScreen(
-                viewModel = CharactersViewModel(),
-                onCharacterClick = {}
-            )
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun RickandMortyAppPreview() {
-    RickandMortyTheme {
-        Surface {
-            RickandMortyApp(onBackCharacters = {
-                AppNavHost(navController = navController)
-            }) {
-                paixao.lueny.rickandmorty.ui.navigation.AppNavHost(navController = navController)
-            }
+            content()
         }
     }
 }

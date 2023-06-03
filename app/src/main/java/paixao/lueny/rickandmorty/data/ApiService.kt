@@ -1,4 +1,4 @@
-package paixao.lueny.rickandmorty.data.retrofitBuilder
+package paixao.lueny.rickandmorty.data
 
 import paixao.lueny.rickandmorty.data.model.CharacterResponse
 import paixao.lueny.rickandmorty.data.model.CharactersResponse

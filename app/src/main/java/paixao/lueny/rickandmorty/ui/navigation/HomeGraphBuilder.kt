@@ -12,13 +12,9 @@ fun NavGraphBuilder.homeGraph(
     navigation(
         startDestination = charactersRoute,
         route = homeGraphRoute
-    ){
+    ) {
         charactersScreen(onNavigateToCharacterDetails)
     }
-}
-
-fun NavController.navigateToHomeGraph(){
-    navigate(homeGraphRoute)
 }
 
 
