@@ -8,12 +8,14 @@
     <string name="open_filter">Filtro</string>
     <string name="name_character">Nome</string>
     <string name="status_character">Status</string>
-    <string name="status_alive">alive</string>
-    <string name="status_dead">dead</string>
-    <string name="status_unknown">unknown</string>
+    <string name="status_alive">Vivo</string>
+    <string name="status_dead">Morto</string>
+    <string name="status_unknown">Desconhecido</string>
+    <string name="status_clean">Limpar</string>
     <string name="filter">Filtrar</string>
     <string name="search_bar">Quem você procura?</string>
     <string name="status">Status:</string>
+    <string name="status_selected">Selecionado:</string>
     <string name="species">Especie:</string>
     <string name="gender">Genero:</string>
     <string name="origin">Origem:</string>
