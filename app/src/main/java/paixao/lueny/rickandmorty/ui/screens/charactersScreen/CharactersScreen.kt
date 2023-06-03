@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.List
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,22 +44,29 @@ import androidx.compose.foundation.layout.Column as Column
 @Composable
 fun CharactersScreen(
     viewModel: CharactersViewModel,
-    oncharacterClick: (Character) -> Unit = {}
+    onCharacterClick: (Character) -> Unit
 ) {
     val characters = viewModel.getCharacters().collectAsLazyPagingItems()
+    val onFilterClick: (String?, Character.Status?) -> Unit = { searchText, status ->
 
-    FilterBottomSheet(
-        onApplyFilter = {},
-        backContent = { openBottomSheet ->
-            Column(
-                Modifier.fillMaxSize()
-            ) {
-                Toolbar(openBottomSheet = openBottomSheet)
-                CharacterList(characters = characters)
+    }
+    RickandMortyTheme {
+        FilterBottomSheet(
+            onFilterClick = onFilterClick,
+            backContent = { openBottomSheet ->
+                Column(
+                    Modifier.fillMaxSize()
+                ) {
+                    Toolbar(openBottomSheet = openBottomSheet)
+                    CharacterList(
+                        characters = characters,
+                        onCharacterClick = onCharacterClick
+                    )
+                }
+
             }
-
-        }
-    )
+        )
+    }
 }
 
 @Composable
@@ -68,7 +76,7 @@ private fun Toolbar(openBottomSheet: () -> Unit) {
     Surface {
         Row(
             modifier = Modifier
-                .background(teal_700)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(12.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -90,15 +98,22 @@ private fun Toolbar(openBottomSheet: () -> Unit) {
 
 
 @Composable
-private fun CharacterList(characters: LazyPagingItems<Character>) {
+private fun CharacterList(
+    characters: LazyPagingItems<Character>,
+    onCharacterClick: (Character) -> Unit = {}
+) {
 
     LazyColumn(
+        Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         items(characters) { character ->
             character?.let {
-                CharacterItem(character = character)
+                CharacterItem(
+                    character = character,
+                    Modifier
+                        .clickable { onCharacterClick(it) })
             }
         }
     }
@@ -109,13 +124,13 @@ private fun CharacterList(characters: LazyPagingItems<Character>) {
 private fun FilterButton(openBottomSheet: () -> Unit) {
     val context = LocalContext.current
     Card(
-        modifier = Modifier.background(teal_700),
+        modifier = Modifier.background(MaterialTheme.colorScheme.primary),
         border = BorderStroke(0.5.dp, Color.White)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(teal_700)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(vertical = 2.dp, horizontal = 6.dp)
                 .clickable {
                     openBottomSheet()
@@ -145,7 +160,7 @@ fun CharactersScreenPreview() {
         Surface {
             CharactersScreen(
                 viewModel = CharactersViewModel(),
-                oncharacterClick ={}
+                onCharacterClick = { }
             )
         }
     }
