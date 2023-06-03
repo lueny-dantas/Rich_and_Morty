@@ -1,37 +1,35 @@
 package paixao.lueny.rickandmorty
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MovableContent
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
+import paixao.lueny.rickandmorty.domain.models.Character
+import paixao.lueny.rickandmorty.ui.navigation.AppNavHost
+import paixao.lueny.rickandmorty.ui.navigation.characterDetailsRoute
+import paixao.lueny.rickandmorty.ui.navigation.charactersRoute
+import paixao.lueny.rickandmorty.ui.navigation.navigateToCharacterDetails
+import paixao.lueny.rickandmorty.ui.navigation.navigateToCharacters
 import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersScreen
 import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersViewModel
 import paixao.lueny.rickandmorty.ui.theme.RickandMortyTheme
-import androidx.compose.material3.CenterAlignedTopAppBar as CenterAlignedTopAppBar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,36 +40,75 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RickandMortyApp()
+                    RickandMortyAppController()
                 }
             }
         }
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RickandMortyApp() {
-    val context = LocalContext.current
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                { Text(text = context.getString(R.string.app_name)) },
-                Modifier.semantics { testTag = "RickAndMortyTopAppBar" })
-        })
-    {
+fun RickandMortyAppController(navController: NavHostController = rememberNavController()) {
+
+    LaunchedEffect(Unit) {
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            val routes = navController.backQueue.map {
+                it.destination.route
+            }
+            Log.i("MainActivity", "onCreate: back stack - $routes")
+        }
+    }
+    val backStackEntryState by navController.currentBackStackEntryAsState()
+    val orderDoneMessage = backStackEntryState
+        ?.savedStateHandle
+        ?.getStateFlow<String?>("order_done", null)
+        ?.collectAsState()
+    Log.i(
+        "MainActivity",
+        "onCreate: order done message ${orderDoneMessage?.value} "
+    )
+    val currentDestination = backStackEntryState?.destination
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    orderDoneMessage?.value?.let { message ->
+        scope.launch {
+            snackbarHostState.showSnackbar(message = message)
+        }
+    }
+    val currentRoute = currentDestination?.route
+    val selectedItem by remember(currentDestination) {
+        when (currentRoute) {
+            charactersRoute ->// adicionar o caminho
+                characterDetailsRoute-> //adicionar o caminho
+        } else ->
+    }
+    RickandMortyApp(
+        onCharacterSelected = {character ->
+            navController.navigateToCharacterDetails(character)
+        },
+        onBackCharacters = {navController.navigateToCharacters()}
+    ) {
+        AppNavHost(navController = navController, character =//??)
+    }
+
+
+}
+
+@Composable
+fun RickandMortyApp(
+    onCharacterSelected: (Character?) -> Unit = {},
+    onBackCharacters: () -> Unit = {},
+    function: () -> Unit,
+) {
+    RickandMortyTheme {
         Column(
-            Modifier.padding(it)
         ) {
             CharactersScreen(
                 viewModel = CharactersViewModel(),
-                oncharacterClick = {}
+                onCharacterClick = {}
             )
-
         }
     }
-
 }
 
 
@@ -80,7 +117,11 @@ fun RickandMortyApp() {
 fun RickandMortyAppPreview() {
     RickandMortyTheme {
         Surface {
-            RickandMortyApp()
+            RickandMortyApp(onBackCharacters = {
+                AppNavHost(navController = navController)
+            }) {
+                paixao.lueny.rickandmorty.ui.navigation.AppNavHost(navController = navController)
+            }
         }
     }
 }
