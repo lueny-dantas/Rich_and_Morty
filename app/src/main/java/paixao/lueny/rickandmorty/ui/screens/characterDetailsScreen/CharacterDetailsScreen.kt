@@ -1,5 +1,6 @@
 package paixao.lueny.rickandmorty.ui.screens.characterDetailsScreen
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,9 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,52 +37,30 @@ import paixao.lueny.rickandmorty.domain.models.Character
 import paixao.lueny.rickandmorty.ui.theme.RickandMortyTheme
 import paixao.lueny.rickandmorty.ui.theme.caveatFont
 import paixao.lueny.rickandmorty.ui.theme.teal_700
+import paixao.lueny.rickandmorty.ui.theme.white
 
 @Composable
 fun CharacterDetailsScreen(
     character: Character,
-    onBackClick:() -> Unit = {}
+    onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     Column(
         Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(Color.White)
     ) {
-        Surface {
-            Row(
-                modifier = Modifier
-                    .background(teal_700)
-                    .padding(12.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-
-            ) {
-                Icon(
-                    Icons.Rounded.ArrowBack,
-                    contentDescription = null,
-                    tint = Color.White,
-                    )
-                Spacer(modifier = Modifier.weight(0.8F))
-                Text(
-                    text = context.getString(R.string.details_characters),
-                    color = Color.White,
-                    fontFamily = caveatFont,
-                    textAlign = TextAlign.Center,
-                    fontSize = 32.sp,
-
-                )
-                Spacer(modifier = Modifier.weight(1F))
-
-            }
-        }
-
+        ToolBar(
+            context = context,
+            onBackClick = onBackClick
+        )
         AsyncImage(
             model = character.image,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(116.dp),
+                .height(300.dp),
             placeholder = painterResource(id = R.drawable.placeholder),
             contentScale = ContentScale.Crop,
         )
@@ -86,41 +70,84 @@ fun CharacterDetailsScreen(
                 vertical = 8.dp
             )
         ) {
-            Text(text = character.name,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold )
-            Spacer(Modifier.height(16.dp))
-            Row {
-                Text(text = context.getString(R.string.status))
-                Text(text = character.status.statusPresentation)
+            CharacterName(character)
+            Information(label = R.string.status, value = character.status.statusPresentation)
+            Information(label = R.string.species, value = character.species)
+            Information(label = R.string.gender, value = character.gender.genderApresentation)
+            Information(label = R.string.origin, value = character.origin.name)
+            Information(label = R.string.location, value = character.location.name)
+        }
+    }
+}
+
+@Composable
+private fun CharacterName(character: Character) {
+    Text(
+        text = character.name,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold
+    )
+    Spacer(Modifier.height(16.dp))
+}
+
+@Composable
+private fun Information(
+    label: Int,
+    value: String,
+) {
+    val context = LocalContext.current
+    Row {
+        Text(text = context.getString(label))
+        Spacer(modifier = Modifier.weight(1F))
+        Text(text = value)
+    }
+    Spacer(Modifier.height(16.dp))
+}
+
+@Composable
+private fun ToolBar(
+    context: Context,
+    onBackClick: () -> Unit = {}
+) {
+    Surface {
+        Row(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(12.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+
+            ) {
+            Button(
+                onClick = onBackClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = white,
+                )
+            ) {
+                Icon(
+                    Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White,
+                )
             }
-            Spacer(Modifier.height(16.dp))
-            Row {
-                Text(text = context.getString(R.string.species))
-                Text(text = character.species)
-            }
-            Spacer(Modifier.height(16.dp))
-            Row {
-                Text(text = context.getString(R.string.gender))
-                Text(text = character.gender.genderApresentation)
-            }
-            Spacer(Modifier.height(16.dp))
-            Row {
-                Text(text = context.getString(R.string.origin))
-                Text(text = character.origin.name)
-            }
-            Spacer(Modifier.height(16.dp))
-            Row {
-                Text(text = context.getString(R.string.location))
-                Text(text = character.location.name)
-            }
+            Spacer(modifier = Modifier.weight(0.8F))
+            Text(
+                text = context.getString(R.string.details_characters),
+                color = Color.White,
+                fontFamily = caveatFont,
+                textAlign = TextAlign.Center,
+                fontSize = 32.sp,
+
+                )
+            Spacer(modifier = Modifier.weight(1F))
 
         }
     }
 }
 
 @Composable
-fun CharacterDetails(text: String,){
+fun CharacterDetails(text: String) {
     Column {
 
     }
@@ -134,14 +161,17 @@ fun CharactersDetailsScreenPreview() {
         CharacterDetailsScreen(
             character =
             Character(
+                0,
                 "Rick Sanchez",
                 Character.Status.Alive,
-                "Human",
+                "Humano",
                 Character.Gender.Male,
-                Character.Origin("Earth"),
-                Character.Location("Earth"),
+                Character.Origin("Terra"),
+                Character.Location("Terra"),
                 "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            )
+
+                ),
+            onBackClick = {}
         )
 
     }
