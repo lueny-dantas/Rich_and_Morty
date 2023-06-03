@@ -8,6 +8,7 @@ import paixao.lueny.rickandmorty.domain.models.Character
 object CharactersMapper {
     fun toDomain(characterResponse: CharacterResponse): Character {
         return Character(
+            id = characterResponse.id,
             name = characterResponse.name,
             image = characterResponse.image,
             species = characterResponse.species,

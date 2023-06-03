@@ -11,6 +11,7 @@ data class PageInfo(
     val nextPage: String?,
 )
 data class Character(
+    val id: Int,
     val name: String,
     val status: Status,
     val species: String,

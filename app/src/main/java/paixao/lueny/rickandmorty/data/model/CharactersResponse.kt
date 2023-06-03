@@ -9,6 +9,7 @@ data class CharactersResponse(
 
 @Serializable
 data class CharacterResponse(
+    val id: Int = 0,
     val image: String,
     val name: String,
     val species: String,

@@ -26,7 +26,7 @@ import paixao.lueny.rickandmorty.ui.theme.RickandMortyTheme
 @Composable
 fun CharacterItem(
     character: Character,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier
@@ -68,13 +68,14 @@ fun CharacterCardPreview() {
     RickandMortyTheme {
         CharacterItem(
             character = Character(
-                "Rick Sanchez",
-                Character.Status.Alive,
-                "Human",
-                Character.Gender.Male,
-                Character.Origin("Earth"),
-                Character.Location("Earth"),
-                "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                id = 1,
+                name = "Rick Sanchez",
+                status = Character.Status.Alive,
+                species = "Human",
+                gender = Character.Gender.Male,
+                origin = Character.Origin("Earth"),
+                location = Character.Location("Earth"),
+                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
             )
         )
     }
