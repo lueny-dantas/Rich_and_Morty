@@ -18,7 +18,7 @@ fun NavGraphBuilder.charactersScreen(
         val viewModel = viewModel<CharactersViewModel>()
         CharactersScreen(
             viewModel = viewModel,
-            oncharacterClick = onNavigateToCharacterDetails
+            onCharacterClick = onNavigateToCharacterDetails
         )
     }
 }
