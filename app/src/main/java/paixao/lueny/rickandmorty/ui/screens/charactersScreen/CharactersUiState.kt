@@ -6,7 +6,8 @@ import paixao.lueny.rickandmorty.domain.models.PageInfo
 
 data class CharactersUiState(
     val paginationState: PaginationState = PaginationState(),
-    val characters: List<Character> = emptyList()
+    val characters: List<Character> = emptyList(),
+    val onFilterClick: (String?, Character.Status?) -> Unit
 )
 
 data class PaginationState(
