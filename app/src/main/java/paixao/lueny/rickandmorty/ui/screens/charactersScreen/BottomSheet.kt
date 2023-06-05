@@ -106,12 +106,12 @@ private fun BottomSheetContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = white)
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
         Text(
             context.getString(R.string.name_character),
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.tertiary,
             fontSize = 18.sp
         )
         Spacer(Modifier.height(8.dp))
@@ -130,7 +130,7 @@ private fun BottomSheetContent(
         ) {
             Text(
                 text = context.getString(R.string.status_character),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 18.sp
             )
 
@@ -148,7 +148,6 @@ private fun BottomSheetContent(
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .background(white)
                 .fillMaxWidth()
                 .padding(vertical = 3.dp, horizontal = 3.dp)
         ) {
@@ -189,7 +188,10 @@ private fun BottomSheetContent(
                 onFilterClick(searchText.value, selectedStatus.value)
             }
         ) {
-            Text(context.getString(R.string.filter))
+            Text(
+                color = MaterialTheme.colorScheme.secondary,
+                text = context.getString(R.string.filter),
+            )
         }
     }
 }
@@ -262,11 +264,21 @@ private fun SearchTextField(
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             cursorColor = MaterialTheme.colorScheme.primary,
+            backgroundColor = MaterialTheme.colorScheme.secondary,
 
             ),
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Icone de pesquisa") },
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "Icone de pesquisa",
+                tint = MaterialTheme.colorScheme.primary
+            )
+        },
         placeholder = {
-            Text(text = context.getString(R.string.search_bar))
+            Text(
+                text = context.getString(R.string.search_bar),
+                color = MaterialTheme.colorScheme.primary
+            )
         },
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done

@@ -45,36 +45,19 @@ class MainActivity : ComponentActivity() {
 fun RickAndMortyAppController() {
     val navController: NavHostController = rememberNavController()
 
-    LaunchedEffect(Unit) {
-        navController.addOnDestinationChangedListener { _, _, _ ->
-            val routes = navController.backQueue.map {
-                it.destination.route
-            }
-            Log.i("MainActivity", "onCreate: back stack - $routes")
-        }
-    }
-
     RickAndMortyApp(
-        onCharacterSelected = { character ->
-            navController.navigateToCharacterDetails(character)
-        },
-        onBackCharacters = {navController.popBackStack()}
-    ) {
-        AppNavHost(navController = navController)
-    }
+        content = { AppNavHost(navController = navController) }
+    )
 
 
 }
 
 @Composable
 fun RickAndMortyApp(
-    onCharacterSelected: (Character) -> Unit = {},
-    onBackCharacters: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     RickandMortyTheme {
-        Box (
-        ) {
+        Box{
             content()
         }
     }

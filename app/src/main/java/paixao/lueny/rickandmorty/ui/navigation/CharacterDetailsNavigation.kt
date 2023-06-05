@@ -8,7 +8,6 @@ import paixao.lueny.rickandmorty.domain.models.Character
 import paixao.lueny.rickandmorty.ui.screens.characterDetailsScreen.CharacterDetailsScreen
 import paixao.lueny.rickandmorty.ui.screens.characterDetailsScreen.CharacterDetailsViewModel
 
-
 const val characterDetailsRoute = "characterDetails"
 internal const val characterIdArgument = "characterId"
 

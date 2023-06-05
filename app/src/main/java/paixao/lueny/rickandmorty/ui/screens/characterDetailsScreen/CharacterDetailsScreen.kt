@@ -49,7 +49,9 @@ fun CharacterDetailsScreen(
     val character = viewModel.character.collectAsState().value
 
     LaunchedEffect(Unit) {
-        viewModel.getCharacter(characterId = characterId)
+        viewModel.getCharacter(
+            characterId = characterId
+        )
     }
 
     Content(onBackClick, character)
@@ -66,7 +68,7 @@ private fun Content(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         ToolBar(
             context = context,
@@ -100,30 +102,6 @@ private fun Content(
 }
 
 @Composable
-private fun CharacterName(character: Character) {
-    Text(
-        text = character.name,
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold
-    )
-    Spacer(Modifier.height(16.dp))
-}
-
-@Composable
-private fun Information(
-    label: Int,
-    value: String,
-) {
-    val context = LocalContext.current
-    Row {
-        Text(text = context.getString(label))
-        Spacer(modifier = Modifier.weight(1F))
-        Text(text = value)
-    }
-    Spacer(Modifier.height(16.dp))
-}
-
-@Composable
 private fun ToolBar(
     context: Context,
     onBackClick: () -> Unit = {}
@@ -153,7 +131,7 @@ private fun ToolBar(
             Spacer(modifier = Modifier.weight(0.8F))
             Text(
                 text = context.getString(R.string.details_characters),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.secondary,
                 fontFamily = caveatFont,
                 textAlign = TextAlign.Center,
                 fontSize = 32.sp,
@@ -163,6 +141,33 @@ private fun ToolBar(
 
         }
     }
+}
+
+@Composable
+private fun CharacterName(character: Character) {
+    Text(
+        text = character.name,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.tertiary
+    )
+    Spacer(Modifier.height(16.dp))
+}
+
+@Composable
+private fun Information(
+    label: Int,
+    value: String,
+) {
+    val context = LocalContext.current
+    Row {
+        Text(text = context.getString(label),
+            color = MaterialTheme.colorScheme.tertiary)
+        Spacer(modifier = Modifier.weight(1F))
+        Text(text = value,
+            color = MaterialTheme.colorScheme.tertiary)
+    }
+    Spacer(Modifier.height(16.dp))
 }
 
 

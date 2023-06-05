@@ -54,7 +54,6 @@ fun CharactersScreen(
         viewModel.getCharacters(textFilter = textFilter.value, statusFilter = statusFilter.value)
     }.collectAsLazyPagingItems()
 
-
     val onFilterClick: (String, Character.Status?) -> Unit = { newSearchText, newStatus ->
         if (newSearchText != "") {
             textFilter.value = newSearchText
@@ -103,7 +102,7 @@ private fun Toolbar(openBottomSheet: () -> Unit) {
 
             Text(
                 text = context.getString(R.string.characters),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.secondary,
                 fontFamily = caveatFont,
                 textAlign = TextAlign.Center,
                 fontSize = 32.sp
