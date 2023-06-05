@@ -180,7 +180,7 @@ private fun BottomSheetContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 3.dp, horizontal = 3.dp),
-            border = BorderStroke(0.5.dp, Color.White),
+            border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.secondary),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary
             ),
