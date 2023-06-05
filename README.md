@@ -21,6 +21,6 @@ Aplicativo Android | Kotlin com construção da interface em Jetpack Compose que
 
 # ✨ Ilustração
 # Modo Claro    ||     Modo Escuro
+![ezgif com-video-to-gif](https://github.com/lueny-dantas/Rich_and_Morty/assets/98789294/8c916bc7-67e4-4d3b-a933-d27d186abadf)
+![ezgif com-video-to-gif (1)](https://github.com/lueny-dantas/Rich_and_Morty/assets/98789294/764a0ce1-c711-40e2-ba10-7f06294d4af2)
 
-![ezgif com-video-to-gif](https://github.com/lueny-dantas/Rich_and_Morty/assets/98789294/9d3dc549-3c4c-4a35-9061-886ffc84169a)
-![ezgif com-video-to-gif (1)](https://github.com/lueny-dantas/Rich_and_Morty/assets/98789294/8c43fcc6-bd42-4743-a599-709f9c58a703)
