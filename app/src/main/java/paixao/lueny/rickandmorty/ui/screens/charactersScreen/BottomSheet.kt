@@ -1,4 +1,4 @@
-@file:OptIn( ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterialApi::class)
 
 package paixao.lueny.rickandmorty.ui.screens.charactersScreen
 
@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
@@ -32,9 +34,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,17 +54,21 @@ import paixao.lueny.rickandmorty.ui.theme.white
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FilterBottomSheet(
-    onFilterClick: (String?, Character.Status?) -> Unit,
+    onFilterClick: (String, Character.Status?) -> Unit,
     backContent: @Composable (() -> Unit) -> Unit,
 ) {
     val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     val openBottomSheet: () -> Unit = { scope.launch { state.show() } }
 
+    val newOnFilterClick: (String, Character.Status?) -> Unit = { searchText, status ->
+        scope.launch { state.hide() }
+        onFilterClick(searchText, status)
+    }
     ModalBottomSheetLayout(
         sheetState = state,
         sheetContent = {
-            BottomSheetContent(onFilterClick)
+            BottomSheetContent(newOnFilterClick)
         },
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         scrimColor = Color.Black.copy(alpha = 0.5f),
@@ -70,7 +80,7 @@ fun FilterBottomSheet(
 
 @Composable
 private fun BottomSheetContent(
-    onFilterClick: (String?, Character.Status?) -> Unit,
+    onFilterClick: (String, Character.Status?) -> Unit,
 ) {
     val context = LocalContext.current
     val searchText = remember { mutableStateOf("") }
@@ -81,6 +91,16 @@ private fun BottomSheetContent(
 
     val onChangeSelectedStatus: (Character.Status?) -> Unit = { newStatus ->
         selectedStatus.value = newStatus
+    }
+
+    val cleanSearchText: () -> Unit = {
+        searchText.value = ""
+    }
+
+    val statusText = if (selectedStatus.value != null) {
+        selectedStatus.value!!.statusPresentation
+    } else {
+        context.getString(R.string.status_not_selected)
     }
 
     Column(
@@ -94,21 +114,37 @@ private fun BottomSheetContent(
             color = Color.Black,
             fontSize = 18.sp
         )
+        Spacer(Modifier.height(8.dp))
+
         SearchTextField(
             searchText = searchText.value,
             onSearchTextChange = onSearchTextChange,
-            Modifier
-                .fillMaxWidth()
-                .padding(vertical = 3.dp, horizontal = 3.dp)
         )
 
         Spacer(Modifier.height(16.dp))
 
-        Text(
-            context.getString(R.string.status_character),
-            color = Color.Black,
-            fontSize = 18.sp
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = context.getString(R.string.status_character),
+                color = Color.Black,
+                fontSize = 18.sp
+            )
+
+            Text(
+                text = statusText,
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -135,29 +171,11 @@ private fun BottomSheetContent(
 
         Spacer(Modifier.height(16.dp))
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .background(white)
-                .fillMaxWidth()
-                .padding(vertical = 3.dp, horizontal = 3.dp)
-        ) {
-            Text(
-                text = context.getString(R.string.status_selected),
-                color = Color.Black,
-                fontSize = 18.sp
-            )
-            Text(
-                text = context.getString(R.string.status_alive),
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 18.sp
-            )
-            CleanButton(
-                label = R.string.status_clean,
-                onChangeSelectedStatus = onChangeSelectedStatus
-            )
-        }
-        Spacer(Modifier.height(16.dp))
+        CleanButton(
+            label = R.string.status_clean,
+            onChangeSelectedStatus = onChangeSelectedStatus,
+            cleanSearchText = cleanSearchText
+        )
 
         Button(
             modifier = Modifier
@@ -177,9 +195,10 @@ private fun BottomSheetContent(
 }
 
 @Composable
-private fun CleanButton (
+private fun CleanButton(
     label: Int,
     onChangeSelectedStatus: (Character.Status?) -> Unit,
+    cleanSearchText: () -> Unit
 ) {
     val context = LocalContext.current
     Button(
@@ -188,13 +207,17 @@ private fun CleanButton (
             containerColor = white,
             contentColor = MaterialTheme.colorScheme.primary,
         ),
-        modifier = Modifier.padding(vertical = 3.dp, horizontal = 3.dp),
-        onClick = { onChangeSelectedStatus(null) }
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 3.dp, horizontal = 3.dp),
+        onClick = {
+            onChangeSelectedStatus(null)
+            cleanSearchText()
+        }
 
     ) {
         Text(
             text = context.getString(label),
-            modifier = Modifier.padding(start = 4.dp),
             color = MaterialTheme.colorScheme.primary
         )
     }
@@ -228,21 +251,26 @@ private fun StatusButton(
 private fun SearchTextField(
     searchText: String,
     onSearchTextChange: (String) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
 
     OutlinedTextField(
         value = searchText,
         onValueChange = { newValue -> onSearchTextChange(newValue) },
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(100),
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             cursorColor = MaterialTheme.colorScheme.primary,
-        ),
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Icone de pesquisa") },
-        placeholder = { androidx.compose.material.Text(text = context.getString(R.string.search_bar)) },
 
+            ),
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Icone de pesquisa") },
+        placeholder = {
+            Text(text = context.getString(R.string.search_bar))
+        },
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done
+        )
     )
 
 }
@@ -251,7 +279,7 @@ private fun SearchTextField(
 @Composable
 private fun PreviewBottomSheet() {
     RickandMortyTheme {
-       BottomSheetContent(
+        BottomSheetContent(
             onFilterClick = { _, _ -> }
         )
 

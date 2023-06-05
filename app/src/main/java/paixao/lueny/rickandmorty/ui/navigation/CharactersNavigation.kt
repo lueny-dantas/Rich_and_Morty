@@ -10,16 +10,15 @@ import paixao.lueny.rickandmorty.ui.screens.characterDetailsScreen.CharacterDeta
 import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersViewModel
 import paixao.lueny.rickandmorty.ui.screens.charactersScreen.CharactersScreen
 
-internal const val  charactersRoute = "characters"
+internal const val charactersRoute = "characters"
 
 fun NavGraphBuilder.charactersScreen(
-    onNavigateToCharacterDetails:(Character) -> Unit
+    onNavigateToCharacterDetails: (Character) -> Unit
 ) {
-    composable(charactersRoute){
+    composable(charactersRoute) {
         val viewModel = viewModel<CharactersViewModel>(
             factory = CharactersViewModel.Factory
         )
-
         CharactersScreen(
             viewModel = viewModel,
             onCharacterClick = onNavigateToCharacterDetails

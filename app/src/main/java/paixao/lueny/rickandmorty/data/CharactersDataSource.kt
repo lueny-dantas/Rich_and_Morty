@@ -6,15 +6,29 @@ import paixao.lueny.rickandmorty.data.mappers.CharactersMapper
 import paixao.lueny.rickandmorty.data.retrofitBuilder.RetrofitBuilder
 import paixao.lueny.rickandmorty.domain.models.Character
 import retrofit2.HttpException
+import java.util.Locale
 
 
- class CharactersDataSource() : PagingSource<Int, Character>() {
+class CharactersDataSource() : PagingSource<Int, Character>() {
      private val api get() = RetrofitBuilder().create(ApiService::class.java)
+     private var searchTextFilter: String? = null
+     private var statusFilter: Character.Status? = null
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
         return try {
+            val filtersParams = mutableMapOf<String, String>()
+
+            if(searchTextFilter != null){
+                filtersParams["name"] = searchTextFilter!!
+            }
+
+            if(statusFilter != null) {
+                filtersParams["status"] = statusFilter!!.name.lowercase(Locale.getDefault())
+            }
+
             val result = api.getAllCharacters(
-                params.key ?: STARTING_PAGE_INDEX
+                page = params.key ?: STARTING_PAGE_INDEX,
+                params = filtersParams
             ).results ?: emptyList()
 
             val characters: MutableList<Character> = mutableListOf()
@@ -36,14 +50,17 @@ import retrofit2.HttpException
         }
     }
 
-     //CRIAR FUN QUE BATA NA API E TRANSFORME UM CHARACTER_REPONSE EM UM CHARACTER E O RETORNE.
+     fun updateFilters(newSearchTextFilter: String? = null, newStatusFilter: Character.Status? = null){
+         searchTextFilter = newSearchTextFilter
+         statusFilter = newStatusFilter
+     }
+
     suspend fun getCharacter(characterId: Int): Character {
         val characterResponse = api.getCharacter(characterId)
         val character: Character = CharactersMapper.toDomain(characterResponse)
 
          return character
     }
-
 
     companion object {
         private const val STARTING_PAGE_INDEX = 1

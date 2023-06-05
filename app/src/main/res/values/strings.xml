@@ -7,7 +7,7 @@
     <string name="details_characters">Detalhes do Personagem</string>
     <string name="open_filter">Filtro</string>
     <string name="name_character">Nome</string>
-    <string name="status_character">Status</string>
+    <string name="status_character">Status: </string>
     <string name="status_alive">Vivo</string>
     <string name="status_dead">Morto</string>
     <string name="status_unknown">Desconhecido</string>
@@ -15,7 +15,8 @@
     <string name="filter">Filtrar</string>
     <string name="search_bar">Quem você procura?</string>
     <string name="status">Status:</string>
-    <string name="status_selected">Selecionado:</string>
+    <string name="status_selected">Selecionado: </string>
+    <string name="status_not_selected">Nenhum selecionado</string>
     <string name="species">Especie:</string>
     <string name="gender">Genero:</string>
     <string name="origin">Origem:</string>

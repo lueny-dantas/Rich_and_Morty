@@ -14,17 +14,22 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
 import paixao.lueny.rickandmorty.data.CharactersDataSource
 import paixao.lueny.rickandmorty.domain.models.Character
-import paixao.lueny.rickandmorty.ui.screens.characterDetailsScreen.CharacterDetailsViewModel
 
-class CharactersViewModel(): ViewModel() {
+class CharactersViewModel() : ViewModel() {
 
     private val charactersDataSource = CharactersDataSource()
-    fun getCharacters(): Flow<PagingData<Character>> {
+
+    fun getCharacters(
+        textFilter: String? = null,
+        statusFilter: Character.Status? = null
+    ): Flow<PagingData<Character>> {
+        charactersDataSource.updateFilters(textFilter, statusFilter)
+
         return Pager(
             config = PagingConfig(pageSize = 20, maxSize = 999),
             pagingSourceFactory = { charactersDataSource }
         ).flow.cachedIn(viewModelScope)
-        }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -37,4 +42,4 @@ class CharactersViewModel(): ViewModel() {
         }
     }
 
-    }
+}

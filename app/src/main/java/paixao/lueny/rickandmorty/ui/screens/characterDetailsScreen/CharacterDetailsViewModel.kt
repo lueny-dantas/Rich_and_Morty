@@ -15,17 +15,14 @@ import paixao.lueny.rickandmorty.domain.models.Character
 
 class CharacterDetailsViewModel() : ViewModel() {
 
-    //CRIAR UM CharactersDataSource aqui, junto com variaveis de StateFlow e MutableStateFlow
-
     private val _character = MutableStateFlow<Character?>(null)
     val character = _character.asStateFlow()
 
-    val characterDataSource = CharactersDataSource()
+    private val characterDataSource = CharactersDataSource()
     suspend fun getCharacter(characterId: Int) {
         val character = characterDataSource.getCharacter(characterId = characterId)
         _character.emit(character)
     }
-
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

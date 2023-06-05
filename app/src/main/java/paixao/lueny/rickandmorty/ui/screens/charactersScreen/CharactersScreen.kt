@@ -23,6 +23,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +40,6 @@ import paixao.lueny.rickandmorty.R
 import paixao.lueny.rickandmorty.domain.models.Character
 import paixao.lueny.rickandmorty.ui.theme.RickandMortyTheme
 import paixao.lueny.rickandmorty.ui.theme.caveatFont
-import paixao.lueny.rickandmorty.ui.theme.teal_700
 import androidx.compose.foundation.layout.Column as Column
 
 @Composable
@@ -46,9 +47,26 @@ fun CharactersScreen(
     viewModel: CharactersViewModel,
     onCharacterClick: (Character) -> Unit
 ) {
-    val characters = viewModel.getCharacters().collectAsLazyPagingItems()
-    val onFilterClick: (String?, Character.Status?) -> Unit = { searchText, status ->
+    val textFilter = remember { mutableStateOf<String?>(null) }
+    val statusFilter = remember { mutableStateOf<Character.Status?>(null) }
 
+    val characters = remember(textFilter.value, statusFilter.value) {
+        viewModel.getCharacters(textFilter = textFilter.value, statusFilter = statusFilter.value)
+    }.collectAsLazyPagingItems()
+
+
+    val onFilterClick: (String, Character.Status?) -> Unit = { newSearchText, newStatus ->
+        if (newSearchText != "") {
+            textFilter.value = newSearchText
+        } else {
+            textFilter.value = null
+        }
+
+        if (newStatus != null) {
+            statusFilter.value = newStatus
+        } else {
+            statusFilter.value = null
+        }
     }
     RickandMortyTheme {
         FilterBottomSheet(
