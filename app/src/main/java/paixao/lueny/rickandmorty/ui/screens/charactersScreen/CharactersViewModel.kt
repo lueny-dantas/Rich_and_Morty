@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import paixao.lueny.rickandmorty.data.CharactersDataSource
 import paixao.lueny.rickandmorty.domain.models.Character
 
-class CharactersViewModel() : ViewModel() {
+class CharactersViewModel: ViewModel() {
 
     private val charactersDataSource = CharactersDataSource()
 

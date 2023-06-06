@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import paixao.lueny.rickandmorty.data.CharactersDataSource
 import paixao.lueny.rickandmorty.domain.models.Character
 
-class CharacterDetailsViewModel() : ViewModel() {
+class CharacterDetailsViewModel: ViewModel() {
 
     private val _character = MutableStateFlow<Character?>(null)
     val character = _character.asStateFlow()

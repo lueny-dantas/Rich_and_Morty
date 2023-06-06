@@ -9,7 +9,7 @@ import retrofit2.HttpException
 import java.util.Locale
 
 
-class CharactersDataSource() : PagingSource<Int, Character>() {
+class CharactersDataSource: PagingSource<Int, Character>() {
      private val api get() = RetrofitBuilder().create(ApiService::class.java)
      private var searchTextFilter: String? = null
      private var statusFilter: Character.Status? = null
