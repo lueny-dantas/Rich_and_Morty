@@ -1,15 +1,6 @@
 package paixao.lueny.rickandmorty.domain.models
 
 
-data class Page(
-    val info: PageInfo,
-    val characters: List<Character>
-)
-
-data class PageInfo(
-    val totalPages: Int,
-    val nextPage: String?,
-)
 data class Character(
     val id: Int,
     val name: String,
