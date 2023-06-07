@@ -197,59 +197,6 @@ private fun BottomSheetContent(
 }
 
 @Composable
-private fun CleanButton(
-    label: Int,
-    onChangeSelectedStatus: (Character.Status?) -> Unit,
-    cleanSearchText: () -> Unit
-) {
-    val context = LocalContext.current
-    Button(
-        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = white,
-            contentColor = MaterialTheme.colorScheme.primary,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 3.dp, horizontal = 3.dp),
-        onClick = {
-            onChangeSelectedStatus(null)
-            cleanSearchText()
-        }
-
-    ) {
-        Text(
-            text = context.getString(label),
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-
-}
-
-@Composable
-private fun StatusButton(
-    label: Int,
-    status: Character.Status? = null,
-    onChangeSelectedStatus: (Character.Status?) -> Unit,
-) {
-    val context = LocalContext.current
-    Button(
-        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = white,
-            contentColor = MaterialTheme.colorScheme.primary
-        ),
-        onClick = { onChangeSelectedStatus(status) }
-
-    ) {
-        Text(
-            text = context.getString(label),
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-}
-
-@Composable
 private fun SearchTextField(
     searchText: String,
     onSearchTextChange: (String) -> Unit,
@@ -284,6 +231,59 @@ private fun SearchTextField(
             imeAction = ImeAction.Done
         )
     )
+
+}
+
+@Composable
+private fun StatusButton(
+    label: Int,
+    status: Character.Status? = null,
+    onChangeSelectedStatus: (Character.Status?) -> Unit,
+) {
+    val context = LocalContext.current
+    Button(
+        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = white,
+            contentColor = MaterialTheme.colorScheme.primary
+        ),
+        onClick = { onChangeSelectedStatus(status) }
+
+    ) {
+        Text(
+            text = context.getString(label),
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+private fun CleanButton(
+    label: Int,
+    onChangeSelectedStatus: (Character.Status?) -> Unit,
+    cleanSearchText: () -> Unit
+) {
+    val context = LocalContext.current
+    Button(
+        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = white,
+            contentColor = MaterialTheme.colorScheme.primary,
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 3.dp, horizontal = 3.dp),
+        onClick = {
+            onChangeSelectedStatus(null)
+            cleanSearchText()
+        }
+
+    ) {
+        Text(
+            text = context.getString(label),
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
 
 }
 
